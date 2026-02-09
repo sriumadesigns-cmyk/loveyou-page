@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
+
+<style>
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: linear-gradient(180deg, #ffb6c1 0%, #ff69b4 50%, #c71585 100%);
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  padding-top: 80px;
+  overflow: hidden;
+  color: white;
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: bold;
+  text-shadow: 0 0 10px red;
+}
+
+/* Glass buttons */
+button {
+  font-size: 22px;
+  padding: 14px 35px;
+  margin: 20px;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  transition: 0.3s;
+}
+
+/* YES heartbeat */
+#yes {
+  background: linear-gradient(135deg, #ff0000, #ff6a6a);
+  color: white;
+  animation: heartbeat 1.3s infinite;
+}
+
+/* NO button */
+#no {
+  background: rgba(255,255,255,0.4);
+  color: black;
+  position: absolute;
+}
+
+/* Heartbeat */
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  40% { transform: scale(1); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Floating hearts */
+.heart {
+  position: fixed;
+  font-size: 20px;
+  animation: float 4s linear infinite;
+}
+
+@keyframes float {
+  0% { bottom: 0; opacity: 1; }
+  100% { bottom: 100%; opacity: 0; }
+}
+
+/* CONFETTI */
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: red;
+  animation: fall 4s linear infinite;
+}
+
+@keyframes fall {
+  0% { top: -10px; transform: rotate(0deg); }
+  100% { top: 100vh; transform: rotate(360deg); }
+}
+
+/* FULL SCREEN POPUP */
+#popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('couple.jpg') center/cover no-repeat; /* YOUR IMAGE */
+  z-index: 9999;
+}
+
+/* Dark overlay */
+.popup-overlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.popup-text {
+  font-size: 30px;
+  font-weight: bold;
+  text-shadow: 0 0 15px hotpink;
+  max-width: 700px;
+  white-space: pre-line;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SONG 1 -->
+<audio autoplay id="song1" loop>
+  <source src="song1.mp3" type="audio/mp3">
+</audio>
+
+<!-- SONG 2 -->
+<audio id="song2">
+  <source src="song2.mp3" type="audio/mp3">
+</audio>
+
+<h1>Will you be my Valentine? 💘</h1>
+
+<button id="yes" onclick="yesClick()">Yes 💖</button>
+<button id="no" onmouseover="noHover()">No 💔</button>
+
+<!-- POPUP -->
+<div id="popup">
+  <div class="close" onclick="document.getElementById('popup').style.display='none'">❌</div>
+  <div class="popup-overlay">
+    <div class="popup-text" id="popupMessage"></div>
+  </div>
+</div>
+
+<script>
+/* Start song1 when user clicks anywhere */
+document.body.addEventListener("click", function() {
+  document.getElementById("song1").play();
+}, { once: true });
+
+/* NO button texts */
+let noTexts = [
+ "Oh nooo? 🥺",
+ "Pleaseee 💔",
+ "Dont break me 😭",
+ "Think again 💘",
+ "You cant escape 😢"
+];
+
+let index = 0;
+let yesSize = 22;
+
+/* NO hover */
+function noHover() {
+  let noBtn = document.getElementById("no");
+  let yesBtn = document.getElementById("yes");
+
+  noBtn.innerText = noTexts[index];
+  index = (index + 1) % noTexts.length;
+
+  noBtn.style.left = Math.random() * (window.innerWidth - 150) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 60) + "px";
+
+  yesSize += 3;
+  yesBtn.style.fontSize = yesSize + "px";
+  yesBtn.style.padding = yesSize/2 + "px " + yesSize + "px";
+}
+
+/* Tamil love typing text */
+let loveText = "In your arms, I found my home...\nIn your heart, I found my forever...\nYou are the most beautiful miracle in my life.\nStay with me always, because I love you endlessly 💕";
+
+let i = 0;
+
+function typeLovePopup() {
+  if (i < loveText.length) {
+    document.getElementById("popupMessage").innerHTML += loveText.charAt(i);
+    i++;
+    setTimeout(typeLovePopup, 60);
+  }
+}
+
+/* Confetti blast */
+function confettiBlast() {
+  for (let i = 0; i < 150; i++) {
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = ["red","pink","white","gold"][Math.floor(Math.random()*4)];
+    c.style.animationDuration = Math.random() * 3 + 2 + "s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 5000);
+  }
+}
+
+/* YES click */
+function yesClick() {
+
+  // stop song1, play song2
+  document.getElementById("song1").pause();
+  document.getElementById("song2").play();
+
+  // show popup
+  document.getElementById("popup").style.display = "block";
+
+  // clear text & start typing
+  document.getElementById("popupMessage").innerHTML = "";
+  i = 0;
+  typeLovePopup();
+
+  // confetti
+  confettiBlast();
+}
+
+/* Floating hearts */
+setInterval(() => {
+  let heart = document.createElement("div");
+  heart.innerHTML = "💖";
+  heart.className = "heart";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = Math.random() * 20 + 20 + "px";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 4000);
+}, 300);
+</script>
+
+</body>
+</html>
